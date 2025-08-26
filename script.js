@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const updatedDate = new Date(entry.querySelector('updated')?.textContent).toLocaleDateString('nl-NL');
             
             // Creëer de deeplink URL zoals beschreven in de documentatie
-            [cite_start]const deeplink = `http://deeplink.rechtspraak.nl/uitspraak?id=${encodeURIComponent(ecli)}`; // [cite: 458]
+            const deeplink = `http://deeplink.rechtspraak.nl/uitspraak?id=${encodeURIComponent(ecli)}`; // [cite: 458]
 
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item';
