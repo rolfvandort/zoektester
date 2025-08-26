@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoeken in Rechtspraak.nl</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1><span class="icon">⚖️</span> Zoek in de Database van Rechtspraak.nl</h1>
+        <p class="subtitle">Gebruikt de officiële Open Data API</p>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Zoekterm (bijv. 'onrechtmatige daad')...">
+            <button id="searchButton">Zoek</button>
+        </div>
 
+        <div id="status"></div>
+        <div id="results"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
