@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const proxyUrl = 'https://corsproxy.io/?';
         const baseUrl = 'http://data.rechtspraak.nl/uitspraken/zoeken';
         
-        // Parameters: q voor zoekterm, max voor aantal resultaten (maximaal 1000 volgens de docs)
-        // en sort=DESC om de nieuwste resultaten eerst te tonen.
+
+          // Parameters: q voor zoekterm, max voor aantal resultaten, en sord om te sorteren.
         const params = new URLSearchParams({
             q: query,
             max: '20',
-            sort: 'DESC' // Toegestane waarden: "ASC" of "DESC" [cite: 204, 210, 212]
+            sord: 'DESC' // Correcte parameter is 'sord'. Toegestane waarden: "ASC" of "DESC"
         });
         
         const requestUrl = `${proxyUrl}${baseUrl}?${params.toString()}`;
