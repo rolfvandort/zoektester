@@ -1,49 +1,164 @@
+:root {
+    --primary-blue: #007bff; /* Een helder blauw, aanpassen naar exacte kleur van logo/knoppen */
+    --dark-blue: #0056b3;
+    --light-gray: #f8f9fa; /* Achtergrondkleur zoals in de bijlage */
+    --medium-gray: #e9ecef; /* Randen, scheidingslijnen */
+    --text-color: #343a40;
+    --card-bg: #ffffff;
+    --card-border: #dee2e6;
+    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    --font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Een modern sans-serif */
+    --button-primary-bg: #007bff; /* Blauw van knoppen */
+    --button-primary-hover: #0056b3;
+    --button-secondary-bg: #6c757d; /* Grijze knop, indien nodig */
+    --button-secondary-hover: #5a6268;
+    --header-bg: #ffffff; /* Kleur van de bovenste balk */
+    --header-border-bottom: 1px solid #dee2e6;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
+    font-family: var(--font-family);
+    background-color: var(--light-gray);
+    color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding: 0;
     line-height: 1.6;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1200px; /* Bredere container om de lay-out te matchen */
     margin: 0 auto;
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 30, 80, 0.1);
+    padding: 20px;
 }
 
-h1, h2 {
-    color: #1d3557;
-    border-bottom: 2px solid #e9ecef;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+/* --- Header Balk --- */
+.header-bar {
+    background-color: var(--header-bg);
+    border-bottom: var(--header-border-bottom);
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-h1 {
-    text-align: center;
-    border-bottom: none;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
 }
 
-.icon {
-    font-size: 1.5em;
+.logo img {
+    height: 40px; /* Hoogte aanpassen aan het echte logo */
+    width: auto;
 }
 
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.logo-text .main-text {
+    font-weight: bold;
+    color: #343a40; /* Donkere tekst voor logo */
+    font-size: 1.1em;
+}
+
+.logo-text .sub-text {
+    font-size: 0.8em;
+    color: #6c757d;
+}
+
+.user-info {
+    font-size: 0.9em;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info strong {
+    color: var(--text-color);
+}
+
+.location {
+    font-size: 0.8em;
+    color: #888;
+}
+
+/* --- Dashboard / Card Lay-out --- */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr; /* Standaard 1 kolom op kleine schermen */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+@media (min-width: 992px) { /* Vanaf large desktops */
+    .main-content {
+        grid-template-columns: 2fr 1fr; /* Megafilter links (2/3), Resultaten rechts (1/3) */
+    }
+    .results-card {
+        grid-column: 2 / 3; /* Zorg dat results-card in de tweede kolom zit */
+        grid-row: 1 / span 2; /* En over twee rijen strekt, als nodig */
+    }
+}
+@media (min-width: 1200px) { /* Extra grote schermen */
+    .main-content {
+        grid-template-columns: 3fr 2fr; /* Iets breder voor filters */
+    }
+}
+
+
+.dashboard-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 0.5rem; /* Afgeronde hoeken */
+    box-shadow: var(--card-shadow);
+    overflow: hidden; /* Zorgt dat de randen netjes zijn */
+}
+
+.card-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--card-border);
+    background-color: var(--light-gray); /* Lichte achtergrond voor header van kaart */
+}
+
+.card-header h2, .card-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* --- Specifiek voor Megafilter content --- */
 .filter-section {
     margin-bottom: 20px;
 }
 
+.filter-section h3 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--medium-gray); /* Lichte scheidingslijn */
+    padding-bottom: 8px;
+}
+
 .filter-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px; /* Iets kleiner gat voor meer compactheid */
     margin-bottom: 20px;
 }
 
@@ -53,51 +168,71 @@ h1 {
 }
 
 .filter-group label {
-    margin-bottom: 8px;
+    margin-bottom: 5px; /* Iets minder ruimte */
     font-weight: 500;
-    color: #495057;
+    color: var(--text-color);
+    font-size: 0.95rem;
 }
 
 .filter-group input, .filter-group select {
-    padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 16px;
+    padding: 10px 12px; /* Iets minder padding */
+    border: 1px solid var(--card-border);
+    border-radius: 0.25rem; /* Iets minder afgerond */
+    font-size: 0.95rem;
     width: 100%;
     box-sizing: border-box;
+    background-color: #fcfcfc; /* Lichte achtergrond in inputvelden */
 }
 
-#apiSearchButton, #smartFilterButton {
+/* --- Knoppen --- */
+.primary-button, .secondary-button {
     width: 100%;
-    padding: 14px 24px;
+    padding: 12px 20px; /* Iets minder padding */
     border: none;
-    background-color: #457b9d;
-    color: white;
-    font-size: 16px;
+    border-radius: 0.25rem;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    text-align: center;
 }
 
-#apiSearchButton:hover, #smartFilterButton:hover {
-    background-color: #1d3557;
+.primary-button {
+    background-color: var(--button-primary-bg);
+    color: white;
 }
+
+.primary-button:hover {
+    background-color: var(--button-primary-hover);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+.secondary-button {
+    background-color: var(--button-secondary-bg);
+    color: white;
+}
+
+.secondary-button:hover {
+    background-color: var(--button-secondary-hover);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.2);
+}
+
 
 .button-subtext {
     text-align: center;
     color: #6c757d;
-    font-size: 0.9rem;
-    margin-top: 5px;
+    font-size: 0.85rem;
+    margin-top: 8px;
 }
 
 .separator {
     border: none;
     height: 1px;
-    background-color: #e9ecef;
-    margin: 30px 0;
+    background-color: var(--medium-gray);
+    margin: 25px 0;
 }
 
+/* --- Slimme Zoek Sectie (AI Filter) --- */
 #smartSearchSection.hidden {
     display: none;
     opacity: 0;
@@ -127,10 +262,11 @@ h1 {
 }
 
 .smart-search-controls input[type="text"] {
-     padding: 12px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 16px;
+    padding: 10px 12px;
+    border: 1px solid var(--card-border);
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    background-color: #fcfcfc;
 }
 
 .checkbox-group {
@@ -138,25 +274,32 @@ h1 {
     flex-wrap: wrap;
     gap: 15px;
     align-items: center;
+    font-size: 0.9rem;
+    color: #555;
 }
 
 .checkbox-group label {
     display: flex;
     align-items: center;
     gap: 5px;
+    margin-bottom: 0; /* Override default label margin */
 }
 
+/* --- Status & Resultaten --- */
 #status {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     font-style: italic;
-    color: #666;
+    color: #555;
     font-weight: bold;
+    background-color: #e2f0fb; /* Lichte blauwe achtergrond voor status */
+    border-radius: 0.25rem;
+    margin-bottom: 20px;
 }
 
 .result-item {
-    border-bottom: 1px solid #e9ecef;
-    padding: 20px 5px;
+    border-bottom: 1px solid var(--medium-gray);
+    padding: 15px 0; /* Iets minder padding */
 }
 
 .result-item:last-child {
@@ -164,35 +307,36 @@ h1 {
 }
 
 .result-item h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.1rem;
+    margin: 0 0 8px 0; /* Iets minder marge */
+    font-size: 1rem;
 }
 
 .result-item h3 a {
     text-decoration: none;
-    color: #1d3557;
+    color: var(--button-primary-bg); /* Links in primaire kleur */
+    font-weight: 600;
 }
 
 .result-item h3 a:hover {
     text-decoration: underline;
-    color: #e63946;
+    color: var(--button-primary-hover);
 }
 
 .meta-info {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #6c757d;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     word-break: break-all;
 }
 
 .meta-info span {
-    margin-right: 15px;
+    margin-right: 12px; /* Iets minder marge */
     display: inline-block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .summary {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #495057;
 }
 
@@ -200,55 +344,73 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-    gap: 15px;
+    margin-top: 25px;
+    gap: 10px; /* Iets kleiner gat */
 }
 
 #paginationControls button {
-    padding: 10px 20px;
-    border: 1px solid #ced4da;
+    padding: 8px 15px; /* Iets minder padding */
+    border: 1px solid var(--card-border);
     background-color: #fff;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+#paginationControls button:hover:not(:disabled) {
+    background-color: var(--light-gray);
 }
 
 #paginationControls button:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 #pageIndicator {
     font-weight: bold;
+    font-size: 0.95rem;
 }
 
 mark {
-    background-color: #ffda79;
-    padding: 2px;
+    background-color: #ffda79; /* Geel voor markering */
+    padding: 1px 3px;
     border-radius: 3px;
 }
 
+/* --- Autocomplete --- */
 .autocomplete-container {
     position: relative;
 }
 
 .autocomplete-suggestions {
     position: absolute;
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border);
     border-top: none;
     z-index: 99;
     top: 100%;
     left: 0;
     right: 0;
     background-color: white;
-    max-height: 200px;
+    max-height: 180px; /* Iets minder hoogte */
     overflow-y: auto;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+    box-shadow: var(--card-shadow);
 }
 
 .autocomplete-suggestions div {
-    padding: 10px;
+    padding: 8px 12px;
     cursor: pointer;
+    font-size: 0.9rem;
+    color: #495057;
 }
 
 .autocomplete-suggestions div:hover {
     background-color: #e9ecef;
+}
+
+/* Icon for the "Megafilter Rechtspraak.nl" H2 */
+.icon {
+    margin-right: 5px;
 }
