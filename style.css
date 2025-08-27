@@ -26,7 +26,7 @@ body {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -49,7 +49,7 @@ body {
 .main-content-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 30px;
     margin-top: 20px;
 }
 @media (min-width: 992px) {
@@ -97,7 +97,7 @@ body {
 
 /* --- Resultaten --- */
 .status-message { text-align: center; padding: 15px; font-style: italic; color: #555; font-weight: bold; background-color: #e2f0fb; border-radius: 0.25rem; margin-bottom: 20px; display: none; }
-.result-item { border-bottom: 1px solid var(--medium-gray); padding: 15px 0; transition: all 0.3s ease; }
+.result-item { border-bottom: 1px solid var(--medium-gray); padding: 15px 5px; transition: all 0.3s ease; }
 .result-item:last-child { border-bottom: none; }
 .result-item-header { display: flex; justify-content: space-between; align-items: flex-start; }
 .result-item-header h3 { margin: 0 8px 8px 0; font-size: 1rem; flex-grow: 1;}
@@ -106,18 +106,21 @@ body {
 .pin-button { background: none; border: none; cursor: pointer; font-size: 1.5rem; padding: 0 5px; }
 .meta-info { font-size: 0.8rem; color: #6c757d; margin-bottom: 10px; word-break: break-all; }
 .meta-info span { margin-right: 12px; display: inline-block; margin-bottom: 3px; }
-.summary { font-size: 0.9rem; color: #495057; max-height: 6em; overflow: hidden; position: relative; transition: max-height 0.5s ease-in-out; }
+.summary { font-size: 0.9rem; color: #495057; max-height: 4.5em; overflow: hidden; position: relative; transition: max-height 0.5s ease-in-out; }
 .summary.expanded { max-height: 1000px; }
 .read-more { color: var(--primary-blue); cursor: pointer; font-weight: bold; display: block; margin-top: 5px; }
-.full-link { margin-top: 15px; font-size: 0.9rem; font-weight: bold; }
+.full-link { margin-top: 15px; font-size: 0.9rem; font-weight: bold; display: none; }
+.summary.expanded + .full-link { display: block; }
 mark { background-color: #ffda79; padding: 1px 3px; border-radius: 3px; }
 
 /* --- Focus Modus (Pinning) --- */
-#jurisprudenceResultsContainer.focus-mode #apiFilters,
-#jurisprudenceResultsContainer.focus-mode #smartSearchSection,
-#jurisprudenceResultsContainer.focus-mode #jurisprudencePagination { display: none; }
-#jurisprudenceResultsContainer.focus-mode .result-item { opacity: 0.3; pointer-events: none; }
-#jurisprudenceResultsContainer.focus-mode .result-item.is-focused { opacity: 1; pointer-events: auto; border: 2px solid var(--primary-blue); border-radius: 0.5rem; padding: 15px; margin: 10px 0; }
+#jurisprudenceCard.focus-mode #apiFilters,
+#jurisprudenceCard.focus-mode #smartSearchSection,
+#jurisprudenceCard.focus-mode #jurisprudencePagination { display: none; }
+#jurisprudenceCard.focus-mode .result-item { display: none; }
+#jurisprudenceCard.focus-mode .result-item.is-focused { display: block; border: 2px solid var(--primary-blue); border-radius: 0.5rem; padding: 15px; margin: 10px 0; }
+#jurisprudenceCard.focus-mode .result-item.is-focused .summary { max-height: 1000px; }
+#jurisprudenceCard.focus-mode .result-item.is-focused .read-more { display: none; }
 
 /* --- Gepind Item --- */
 #pinnedItemContainer.hidden { display: none; }
