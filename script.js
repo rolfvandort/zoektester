@@ -89,6 +89,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupEventListeners = () => {
         elements.apiSearchButton.addEventListener('click', handleApiSearch);
         elements.creator.addEventListener('input', () => handleAutocomplete(elements.creator, elements.creatorSuggestions, instanties));
+        elements.creatorSuggestions.addEventListener('click', (e) => {
+            if (e.target.tagName === 'DIV') {
+                const selectedItem = instanties.find(item => item.name === e.target.textContent);
+                if (selectedItem) {
+                    elements.creator.value = selectedItem.name;
+                    elements.creator.dataset.id = selectedItem.id;
+                    elements.creatorSuggestions.innerHTML = '';
+                }
+            }
+        });
+        document.addEventListener('click', (e) => { // Sluit suggesties als ergens anders geklikt wordt
+            if (!elements.creator.contains(e.target) && !elements.creatorSuggestions.contains(e.target)) {
+                elements.creatorSuggestions.innerHTML = '';
+            }
+        });
+
         elements.smartFilterButton.addEventListener('click', handleSmartSearch);
         elements.smartSearchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleSmartSearch();
@@ -98,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- API ZOEKFUNCTIE (STAP 1) ---
     const handleApiSearch = async () => {
         elements.status.textContent = 'Resultaten laden... Dit kan even duren.';
+        elements.status.style.display = 'block';
         elements.results.innerHTML = '';
         elements.paginationControls.innerHTML = '';
         elements.smartSearchSection.classList.remove('visible');
@@ -117,6 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
         params.append('max', '1000');
         params.append('sort', 'DESC');
 
+        // Check of er minimaal één filter is ingesteld (naast de defaults)
+        const activeFilters = Array.from(params.entries()).filter(([key, value]) => 
+            !['return', 'max', 'sort'].includes(key) && value !== ''
+        );
+
+        if (activeFilters.length === 0) {
+            elements.status.textContent = 'Selecteer ten minste één filter (bijv. datum of rechtsgebied).';
+            elements.status.style.color = '#dc3545'; // Rood voor foutmelding
+            return;
+        } else {
+             elements.status.style.color = '#555'; // Reset kleur
+        }
+
+
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
         const baseUrl = 'https://data.rechtspraak.nl/uitspraken/zoeken';
         const requestUrl = `${proxyUrl}${encodeURIComponent(`${baseUrl}?${params.toString()}`)}`;
@@ -129,8 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
             
             const entries = xmlDoc.getElementsByTagName('entry');
-            const subtitle = xmlDoc.querySelector('subtitle')?.textContent || `Aantal resultaten: ${entries.length}`;
-
+            
             masterResults = Array.from(entries).map(entry => ({
                 title: entry.querySelector('title')?.textContent || 'Geen titel',
                 ecli: entry.querySelector('id')?.textContent || '',
@@ -143,10 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (masterResults.length === 0) {
                 elements.status.textContent = 'Geen resultaten gevonden voor deze filters.';
+                elements.status.style.color = '#28a745'; // Groen voor succes/info
                 return;
             }
 
             elements.status.textContent = `Totaal ${masterResults.length} resultaten gevonden.`;
+            elements.status.style.color = '#28a745'; // Groen voor succes/info
             currentPage = 1;
             renderPage(currentPage);
             elements.smartSearchSection.classList.remove('hidden');
@@ -154,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             elements.status.textContent = `Fout: ${error.message}. Probeer het opnieuw.`;
+            elements.status.style.color = '#dc3545'; // Rood voor foutmelding
             console.error(error);
         }
     };
@@ -169,17 +202,18 @@ document.addEventListener('DOMContentLoaded', () => {
             currentFilteredResults = [...masterResults];
         } else {
             currentFilteredResults = masterResults.filter(item => {
-                const searchString = (
-                    (searchIn.includes('title') ? item.title.toLowerCase() : '') +
-                    (searchIn.includes('summary') ? item.summary.toLowerCase() : '') +
-                    (searchIn.includes('ecli') ? item.ecli.toLowerCase() : '') +
-                    (searchIn.includes('zaaknummer') ? item.zaaknummer.toLowerCase() : '')
-                );
-                return searchString.includes(keyword);
+                const searchTargets = [];
+                if (searchIn.includes('title')) searchTargets.push(item.title.toLowerCase());
+                if (searchIn.includes('summary')) searchTargets.push(item.summary.toLowerCase());
+                if (searchIn.includes('ecli')) searchTargets.push(item.ecli.toLowerCase());
+                if (searchIn.includes('zaaknummer')) searchTargets.push(item.zaaknummer.toLowerCase());
+                
+                return searchTargets.some(target => target.includes(keyword));
             });
         }
         
         elements.status.textContent = `${currentFilteredResults.length} van de ${masterResults.length} resultaten komen overeen.`;
+        elements.status.style.color = '#28a745'; // Groen voor succes/info
         currentPage = 1;
         renderPage(currentPage);
     };
@@ -206,18 +240,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let titleHTML = item.title;
             let summaryHTML = item.summary;
+            let ecliHTML = item.ecli;
+            let zaaknummerHTML = item.zaaknummer;
 
             if (keyword) {
-                const regex = new RegExp(keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi');
+                // Maak een regex die speciale karakters escapet
+                const escapedKeyword = keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+                const regex = new RegExp(escapedKeyword, 'gi');
+                
                 titleHTML = titleHTML.replace(regex, (match) => `<mark>${match}</mark>`);
                 summaryHTML = summaryHTML.replace(regex, (match) => `<mark>${match}</mark>`);
+                ecliHTML = ecliHTML.replace(regex, (match) => `<mark>${match}</mark>`);
+                zaaknummerHTML = zaaknummerHTML.replace(regex, (match) => `<mark>${match}</mark>`);
             }
 
             resultItem.innerHTML = `
                 <h3><a href="${deeplink}" target="_blank" rel="noopener noreferrer">${titleHTML}</a></h3>
                 <div class="meta-info">
-                    <span><strong>ECLI:</strong> ${item.ecli}</span>
-                    <span><strong>Zaaknr:</strong> ${item.zaaknummer}</span>
+                    <span><strong>ECLI:</strong> ${ecliHTML}</span>
+                    <span><strong>Zaaknr:</strong> ${zaaknummerHTML}</span>
                     <span><strong>Laatst gewijzigd:</strong> ${item.updated.toLocaleDateString('nl-NL')}</span>
                 </div>
                 <p class="summary">${summaryHTML}</p>
@@ -265,7 +306,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleAutocomplete = (inputElement, suggestionsElement, items) => {
         const value = inputElement.value.toLowerCase();
         suggestionsElement.innerHTML = '';
-        if (!value) return;
+        // Reset de dataset.id als de input leeg is of niet overeenkomt met een geselecteerde item
+        if (!value) {
+            inputElement.dataset.id = '';
+            return;
+        }
 
         const filteredItems = items
             .filter(item => item.name.toLowerCase().includes(value))
