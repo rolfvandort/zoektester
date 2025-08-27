@@ -1,8 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- DATA ---
-    const rechtsgebieden = [ { name: 'Bestuursrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#bestuursrecht' }, { name: 'Civiel recht', id: 'http://psi.rechtspraak.nl/rechtsgebied#civielRecht' }, { name: 'Internationaal publiekrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#internationaalPubliekrecht' }, { name: 'Strafrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#strafrecht' } ];
-    const proceduresoorten = [ { name: 'Artikel 81 RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel81ROzaken' }, { name: 'Bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#bodemzaak' }, { name: 'Cassatie', id: 'http://psi.rechtspraak.nl/procedure#cassatie' }, { name: 'Eerste aanleg - enkelvoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegEnkelvoudig' }, { name: 'Eerste aanleg - meervoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegMeervoudig' }, { name: 'Hoger beroep', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroep' }, { name: 'Kort geding', id: 'http://psi.rechtspraak.nl/procedure#kortGeding' }, { name: 'Voorlopige voorziening', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorziening' } ];
-    const instanties = [ { name: "Hoge Raad", id: "http://standaarden.overheid.nl/owms/terms/Hoge_Raad_der_Nederlanden" }, { name: "Raad van State", id: "http://standaarden.overheid.nl/owms/terms/Raad_van_State" }, { name: "Centrale Raad van Beroep", id: "http://standaarden.overheid.nl/owms/terms/Centrale_Raad_van_Beroep" }, { name: "College van Beroep voor het bedrijfsleven", id: "http://standaarden.overheid.nl/owms/terms/College_van_Beroep_voor_het_bedrijfsleven" }, { name: "Rechtbank Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Amsterdam" }, { name: "Rechtbank Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Den_Haag" }, { name: "Rechtbank Gelderland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Gelderland" }, { name: "Rechtbank Limburg", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Limburg" }, { name: "Rechtbank Midden-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Midden-Nederland" }, { name: "Rechtbank Noord-Holland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Holland" }, { name: "Rechtbank Noord-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Nederland" }, { name: "Rechtbank Oost-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Oost-Brabant" }, { name: "Rechtbank Overijssel", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Overijssel" }, { name: "Rechtbank Rotterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Rotterdam" }, { name: "Rechtbank Zeeland-West-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Zeeland-West-Brabant" }, { name: "Gerechtshof Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Amsterdam" }, { name: "Gerechtshof Arnhem-Leeuwarden", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Arnhem-Leeuwarden" }, { name: "Gerechtshof Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Den_Haag" }, { name: "Gerechtshof 's-Hertogenbosch", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_'s-Hertogenbosch" } ];
+    // --- DATA (uit de XML-bestanden) ---
+    const rechtsgebieden = [
+        { name: 'Bestuursrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#bestuursrecht' },
+        { name: 'Civiel recht', id: 'http://psi.rechtspraak.nl/rechtsgebied#civielRecht' },
+        { name: 'Internationaal publiekrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#internationaalPubliekrecht' },
+        { name: 'Strafrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#strafrecht' }
+    ];
+
+    const proceduresoorten = [
+        { name: 'Artikel 81 RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel81ROzaken' },
+        { name: 'Bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#bodemzaak' },
+        { name: 'Cassatie', id: 'http://psi.rechtspraak.nl/procedure#cassatie' },
+        { name: 'Eerste aanleg - enkelvoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegEnkelvoudig' },
+        { name: 'Eerste aanleg - meervoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegMeervoudig' },
+        { name: 'Hoger beroep', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroep' },
+        { name: 'Kort geding', id: 'http://psi.rechtspraak.nl/procedure#kortGeding' },
+        { name: 'Voorlopige voorziening', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorziening' }
+    ];
+    
+    const instanties = [
+        { name: "Hoge Raad", id: "http://standaarden.overheid.nl/owms/terms/Hoge_Raad_der_Nederlanden" },
+        { name: "Raad van State", id: "http://standaarden.overheid.nl/owms/terms/Raad_van_State" },
+        { name: "Centrale Raad van Beroep", id: "http://standaarden.overheid.nl/owms/terms/Centrale_Raad_van_Beroep" },
+        { name: "College van Beroep voor het bedrijfsleven", id: "http://standaarden.overheid.nl/owms/terms/College_van_Beroep_voor_het_bedrijfsleven" },
+        { name: "Rechtbank Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Amsterdam" },
+        { name: "Rechtbank Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Den_Haag" },
+        { name: "Rechtbank Gelderland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Gelderland" },
+        { name: "Rechtbank Limburg", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Limburg" },
+        { name: "Rechtbank Midden-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Midden-Nederland" },
+        { name: "Rechtbank Noord-Holland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Holland" },
+        { name: "Rechtbank Noord-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Nederland" },
+        { name: "Rechtbank Oost-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Oost-Brabant" },
+        { name: "Rechtbank Overijssel", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Overijssel" },
+        { name: "Rechtbank Rotterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Rotterdam" },
+        { name: "Rechtbank Zeeland-West-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Zeeland-West-Brabant" },
+        { name: "Gerechtshof Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Amsterdam" },
+        { name: "Gerechtshof Arnhem-Leeuwarden", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Arnhem-Leeuwarden" },
+        { name: "Gerechtshof Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Den_Haag" },
+        { name: "Gerechtshof 's-Hertogenbosch", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_'s-Hertogenbosch" }
+    ];
 
     // --- DOM ELEMENTEN ---
     const elements = {
@@ -17,14 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
         smartSearchSection: document.getElementById('smartSearchSection'),
         smartSearchInput: document.getElementById('smartSearchInput'),
         searchInCheckboxes: document.querySelectorAll('input[name="searchIn"]'),
+        
         jurisprudenceStatus: document.getElementById('jurisprudenceStatus'),
         jurisprudenceResults: document.getElementById('jurisprudenceResults'),
         jurisprudencePagination: document.getElementById('jurisprudencePagination'),
+        
         wettenbankSearchButton: document.getElementById('wettenbankSearchButton'),
         wettenbankKeyword: document.getElementById('wettenbankKeyword'),
         wettenbankDate: document.getElementById('wettenbankDate'),
         wettenbankStatus: document.getElementById('wettenbankStatus'),
         wettenbankResults: document.getElementById('wettenbankResults'),
+        
         pinnedItemContainer: document.getElementById('pinnedItemContainer'),
         pinnedItemContent: document.getElementById('pinnedItemContent')
     };
@@ -58,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- JURISPRUDENTIE ZOEKER ---
     const handleJurisprudenceSearch = async () => {
         showStatus(elements.jurisprudenceStatus, 'Resultaten laden... Dit kan even duren.');
-        unpinItem(); // Zorg ervoor dat de pin-modus wordt gereset bij een nieuwe zoekopdracht
+        unpinItem();
         elements.jurisprudenceResults.innerHTML = '';
         elements.jurisprudencePagination.innerHTML = '';
         elements.smartSearchSection.classList.remove('visible');
@@ -147,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleWettenbankSearch = async () => {
         showStatus(elements.wettenbankStatus, 'Wettenbank wordt doorzocht...');
         elements.wettenbankResults.innerHTML = '';
-        const keyword = elements.wettenbankKeyword.value;
+        const keyword = elements.wettenbankKeyword.value.trim();
         const date = elements.wettenbankDate.value;
 
         if (!keyword && !date) {
@@ -157,12 +196,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let query = keyword;
         if (date) {
-            query += ` AND dita.datum_inwerkingtreding=${date}`;
+            query += ` AND dcterms.available=${date}`;
         }
         
+        const params = new URLSearchParams({
+            query: query,
+            version: '1.2',
+            operation: 'searchRetrieve',
+            'x-connection': 'w'
+        });
+
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
-        const baseUrl = `https://zoekdienst.overheid.nl/sru/Search?version=1.2&operation=searchRetrieve&query=${encodeURIComponent(query)}&x-connection=w`;
-        const requestUrl = `${proxyUrl}${encodeURIComponent(baseUrl)}`;
+        const baseUrl = 'https://zoekdienst.overheid.nl/sru/Search';
+        const requestUrl = `${proxyUrl}${encodeURIComponent(`${baseUrl}?${params.toString()}`)}`;
 
         try {
             const response = await fetch(requestUrl);
@@ -243,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target.classList.contains('read-more')) {
             e.preventDefault();
             const summaryContainer = target.closest('.result-item').querySelector('.summary');
-            const linkContainer = target.closest('.result-item').querySelector('.full-link');
             summaryContainer.classList.toggle('expanded');
             target.textContent = summaryContainer.classList.contains('expanded') ? 'Lees minder' : 'Lees meer';
         }
@@ -275,10 +320,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let titleHTML = item.title;
             let summaryHTML = item.summary;
+            let ecliHTML = item.ecli;
+            let zaaknummerHTML = item.zaaknummer;
+
             if (keyword) {
+                const searchIn = Array.from(elements.searchInCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
                 const regex = new RegExp(keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'), 'gi');
-                titleHTML = titleHTML.replace(regex, match => `<mark>${match}</mark>`);
-                summaryHTML = summaryHTML.replace(regex, match => `<mark>${match}</mark>`);
+                if (searchIn.includes('title')) titleHTML = titleHTML.replace(regex, match => `<mark>${match}</mark>`);
+                if (searchIn.includes('summary')) summaryHTML = summaryHTML.replace(regex, match => `<mark>${match}</mark>`);
+                if (searchIn.includes('ecli')) ecliHTML = ecliHTML.replace(regex, match => `<mark>${match}</mark>`);
+                if (searchIn.includes('zaaknummer')) zaaknummerHTML = zaaknummerHTML.replace(regex, match => `<mark>${match}</mark>`);
             }
 
             resultItem.innerHTML = `
@@ -287,8 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="pin-button" title="Pin dit dossier">📌</button>
                 </div>
                 <div class="meta-info">
-                    <span><strong>ECLI:</strong> ${item.ecli}</span>
-                    <span><strong>Zaaknr:</strong> ${item.zaaknummer}</span>
+                    <span><strong>ECLI:</strong> ${ecliHTML}</span>
+                    <span><strong>Zaaknr:</strong> ${zaaknummerHTML}</span>
                     <span><strong>Laatst gewijzigd:</strong> ${item.updated.toLocaleDateString('nl-NL')}</span>
                 </div>
                 <div class="summary">${summaryHTML}</div>
@@ -328,8 +379,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleAutocomplete = (input, suggestions, items) => {
         const value = input.value.toLowerCase();
         suggestions.innerHTML = '';
-        input.dataset.id = '';
-        if (!value) return;
+        if (!value) {
+            input.dataset.id = '';
+            return;
+        }
 
         const filtered = items.filter(item => item.name.toLowerCase().includes(value)).slice(0, 5);
         filtered.forEach(item => {
