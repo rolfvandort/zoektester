@@ -7,77 +7,105 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1><span class="icon">⚖️</span> Megafilter Rechtspraak.nl</h1>
-
-        <div id="apiFilters" class="filter-section">
-            <h2>Stap 1: Haal een brede selectie op</h2>
-            <div class="filter-grid">
-                <div class="filter-group">
-                    <label for="dateFrom">Uitspraakdatum (vanaf)</label>
-                    <input type="date" id="dateFrom">
-                </div>
-                <div class="filter-group">
-                    <label for="dateTo">Uitspraakdatum (tot en met)</label>
-                    <input type="date" id="dateTo">
-                </div>
-                <div class="filter-group">
-                    <label for="modifiedFrom">Wijzigingsdatum (vanaf)</label>
-                    <input type="date" id="modifiedFrom">
-                </div>
-                <div class="filter-group">
-                    <label for="modifiedTo">Wijzigingsdatum (tot en met)</label>
-                    <input type="date" id="modifiedTo">
-                </div>
-                <div class="filter-group">
-                    <label for="subject">Rechtsgebied</label>
-                    <select id="subject">
-                        <option value="">-- Selecteer --</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="procedure">Procedure</label>
-                    <select id="procedure">
-                        <option value="">-- Selecteer --</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="type">Type Document</label>
-                    <select id="type">
-                        <option value="">-- Selecteer --</option>
-                        <option value="Uitspraak">Uitspraak</option>
-                        <option value="Conclusie">Conclusie</option>
-                    </select>
-                </div>
-                <div class="filter-group autocomplete-container">
-                    <label for="creator">Instantie</label>
-                    <input type="text" id="creator" placeholder="Typ om te zoeken...">
-                    <div id="creatorSuggestions" class="autocomplete-suggestions"></div>
+    <div class="header-bar">
+        <div class="header-content container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/150x50?text=LOGO" alt="Van Dort Letselschade Logo">
+                <div class="logo-text">
+                    <span class="main-text">VAN DORT LETSELSCHADE</span>
+                    <span class="sub-text">Uw centrale startpunt</span>
                 </div>
             </div>
-            <button id="apiSearchButton">Haal resultaten op</button>
-            <p class="button-subtext">Maximaal 1000 resultaten.</p>
+            <div class="user-info">
+                <span>Ingelogd als: <strong>Ine van Dort</strong></span>
+                <span class="location">Maastricht, Limburg, Netherlands</span>
+            </div>
         </div>
+    </div>
 
-        <hr class="separator">
-
-        <div id="smartSearchSection" class="filter-section hidden">
-            <h2>Stap 2: Zoek met trefwoorden binnen deze resultaten</h2>
-            <div class="smart-search-controls">
-                <input type="text" id="smartSearchInput" placeholder="Zoek op trefwoord...">
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="searchIn" value="title" checked> Titel</label>
-                    <label><input type="checkbox" name="searchIn" value="summary" checked> Samenvatting</label>
-                    <label><input type="checkbox" name="searchIn" value="ecli"> ECLI</label>
-                    <label><input type="checkbox" name="searchIn" value="zaaknummer"> Zaaknummer</label>
+    <div class="main-content container">
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2><span class="icon">⚖️</span> Megafilter Rechtspraak.nl</h2>
+            </div>
+            <div class="card-body">
+                <div id="apiFilters" class="filter-section">
+                    <h3>Haal een brede selectie op:</h3>
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label for="dateFrom">Uitspraakdatum (vanaf)</label>
+                            <input type="date" id="dateFrom">
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateTo">Uitspraakdatum (tot en met)</label>
+                            <input type="date" id="dateTo">
+                        </div>
+                        <div class="filter-group">
+                            <label for="modifiedFrom">Wijzigingsdatum (vanaf)</label>
+                            <input type="date" id="modifiedFrom">
+                        </div>
+                        <div class="filter-group">
+                            <label for="modifiedTo">Wijzigingsdatum (tot en met)</label>
+                            <input type="date" id="modifiedTo">
+                        </div>
+                        <div class="filter-group">
+                            <label for="subject">Rechtsgebied</label>
+                            <select id="subject">
+                                <option value="">-- Selecteer --</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="procedure">Procedure</label>
+                            <select id="procedure">
+                                <option value="">-- Selecteer --</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="type">Type Document</label>
+                            <select id="type">
+                                <option value="">-- Selecteer --</option>
+                                <option value="Uitspraak">Uitspraak</option>
+                                <option value="Conclusie">Conclusie</option>
+                            </select>
+                        </div>
+                        <div class="filter-group autocomplete-container">
+                            <label for="creator">Instantie</label>
+                            <input type="text" id="creator" placeholder="Typ om te zoeken...">
+                            <div id="creatorSuggestions" class="autocomplete-suggestions"></div>
+                        </div>
+                    </div>
+                    <button id="apiSearchButton" class="primary-button">Haal resultaten op</button>
+                    <p class="button-subtext">Maximaal 1000 resultaten.</p>
                 </div>
-                <button id="smartFilterButton">Filter Binnen Resultaten</button>
+
+                <hr class="separator">
+
+                <div id="smartSearchSection" class="filter-section hidden">
+                    <h3>Zoek met trefwoorden binnen deze resultaten:</h3>
+                    <div class="smart-search-controls">
+                        <input type="text" id="smartSearchInput" placeholder="Zoek op trefwoord...">
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="searchIn" value="title" checked> Titel</label>
+                            <label><input type="checkbox" name="searchIn" value="summary" checked> Samenvatting</label>
+                            <label><input type="checkbox" name="searchIn" value="ecli"> ECLI</label>
+                            <label><input type="checkbox" name="searchIn" value="zaaknummer"> Zaaknummer</label>
+                        </div>
+                        <button id="smartFilterButton" class="secondary-button">Filter Binnen Resultaten</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="status"></div>
-        <div id="results"></div>
-        <div id="paginationControls"></div>
+        <div class="dashboard-card results-card">
+            <div class="card-header">
+                <h3>Resultaten</h3>
+            </div>
+            <div class="card-body">
+                <div id="status"></div>
+                <div id="results"></div>
+                <div id="paginationControls"></div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
