@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams({
             q: query,
             max: '20',
-            sord: 'DESC' // Correcte parameter is 'sord'. Toegestane waarden: "ASC" of "DESC"
+            sort: 'DESC' // Correcte parameter is 'sord'. Toegestane waarden: "ASC" of "DESC"
         });
         
         const requestUrl = `${proxyUrl}${baseUrl}?${params.toString()}`;
