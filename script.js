@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- PROXY-INSTELLING ---
+    const PROXY_URL = 'https://corsproxy.io/?'; // Nieuwe, alternatieve proxy
+
     // --- DATA (uit de XML-bestanden) ---
     const rechtsgebieden = [
         { name: 'Bestuursrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#bestuursrecht' },
@@ -113,10 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
         params.append('max', '1000');
         params.append('sort', 'DESC');
 
-        const proxyUrl = 'https://api.allorigins.win/raw?url=';
         const baseUrl = 'https://data.rechtspraak.nl/uitspraken/zoeken';
         const targetUrl = `${baseUrl}?${params.toString()}`;
-        const requestUrl = `${proxyUrl}${encodeURIComponent(targetUrl)}`;
+        const requestUrl = `${PROXY_URL}${targetUrl}`;
 
         try {
             const response = await fetch(requestUrl);
@@ -179,12 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
         renderJurisprudencePage(currentPage);
     };
 
-    // --- WETTENBANK ZOEKER ---
+    // --- WETTENBANK ZOEKER (GECORRIGEERD) ---
     const handleWettenbankSearch = async () => {
         showStatus(elements.wettenbankStatus, 'Wettenbank wordt doorzocht...');
         elements.wettenbankResults.innerHTML = '';
         const keyword = elements.wettenbankKeyword.value.trim();
-
+        
         if (!keyword) {
             showStatus(elements.wettenbankStatus, 'Voer een trefwoord in.', 'error');
             return;
@@ -197,11 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
             'x-connection': 'w',
             maximumRecords: '50'
         });
-
-        const proxyUrl = 'https://api.allorigins.win/raw?url=';
+        
         const baseUrl = 'https://zoekdienst.overheid.nl/sru/Search';
         const targetUrl = `${baseUrl}?${params.toString()}`;
-        const requestUrl = `${proxyUrl}${encodeURIComponent(targetUrl)}`;
+        const requestUrl = `${PROXY_URL}${targetUrl}`;
 
         try {
             const response = await fetch(requestUrl);
