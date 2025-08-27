@@ -179,13 +179,12 @@ document.addEventListener('DOMContentLoaded', () => {
         renderJurisprudencePage(currentPage);
     };
 
-    // --- WETTENBANK ZOEKER (GECORRIGEERD) ---
+    // --- WETTENBANK ZOEKER ---
     const handleWettenbankSearch = async () => {
         showStatus(elements.wettenbankStatus, 'Wettenbank wordt doorzocht...');
         elements.wettenbankResults.innerHTML = '';
         const keyword = elements.wettenbankKeyword.value.trim();
-        
-        // De problematische datumfilter is hier verwijderd voor een betrouwbare werking.
+
         if (!keyword) {
             showStatus(elements.wettenbankStatus, 'Voer een trefwoord in.', 'error');
             return;
@@ -196,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
             version: '1.2',
             operation: 'searchRetrieve',
             'x-connection': 'w',
-            maximumRecords: '50' // Limiteer het aantal resultaten voor de performance
+            maximumRecords: '50'
         });
 
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
@@ -250,7 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const unpinItem = () => {
         elements.jurisprudenceCard.classList.remove('focus-mode');
-        document.querySelector('.result-item.is-focused')?.classList.remove('is-focused');
+        const focusedItem = document.querySelector('.result-item.is-focused');
+        if (focusedItem) {
+            focusedItem.classList.remove('is-focused');
+        }
         elements.pinnedItemContainer.classList.add('hidden');
     };
 
