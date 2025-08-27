@@ -3,21 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoeken in Rechtspraak.nl</title>
+    <title>Megafilter Rechtspraak.nl</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1><span class="icon">⚖️</span> Zoek in de Database van Rechtspraak.nl</h1>
-        <p class="subtitle">Gebruikt de officiële Open Data API</p>
-        
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Zoekterm (bijv. 'onrechtmatige daad')...">
-            <button id="searchButton">Zoek</button>
+        <h1><span class="icon">⚖️</span> Megafilter Rechtspraak.nl</h1>
+
+        <div id="apiFilters" class="filter-section">
+            <h2>Stap 1: Haal een brede selectie op</h2>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="dateFrom">Uitspraakdatum (vanaf)</label>
+                    <input type="date" id="dateFrom">
+                </div>
+                <div class="filter-group">
+                    <label for="dateTo">Uitspraakdatum (tot en met)</label>
+                    <input type="date" id="dateTo">
+                </div>
+                <div class="filter-group">
+                    <label for="modifiedFrom">Wijzigingsdatum (vanaf)</label>
+                    <input type="date" id="modifiedFrom">
+                </div>
+                <div class="filter-group">
+                    <label for="modifiedTo">Wijzigingsdatum (tot en met)</label>
+                    <input type="date" id="modifiedTo">
+                </div>
+                <div class="filter-group">
+                    <label for="subject">Rechtsgebied</label>
+                    <select id="subject">
+                        <option value="">-- Selecteer --</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="procedure">Procedure</label>
+                    <select id="procedure">
+                        <option value="">-- Selecteer --</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="type">Type Document</label>
+                    <select id="type">
+                        <option value="">-- Selecteer --</option>
+                        <option value="Uitspraak">Uitspraak</option>
+                        <option value="Conclusie">Conclusie</option>
+                    </select>
+                </div>
+                <div class="filter-group autocomplete-container">
+                    <label for="creator">Instantie</label>
+                    <input type="text" id="creator" placeholder="Typ om te zoeken...">
+                    <div id="creatorSuggestions" class="autocomplete-suggestions"></div>
+                </div>
+            </div>
+            <button id="apiSearchButton">Haal resultaten op</button>
+            <p class="button-subtext">Maximaal 1000 resultaten.</p>
+        </div>
+
+        <hr class="separator">
+
+        <div id="smartSearchSection" class="filter-section hidden">
+            <h2>Stap 2: Zoek met trefwoorden binnen deze resultaten</h2>
+            <div class="smart-search-controls">
+                <input type="text" id="smartSearchInput" placeholder="Zoek op trefwoord...">
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="searchIn" value="title" checked> Titel</label>
+                    <label><input type="checkbox" name="searchIn" value="summary" checked> Samenvatting</label>
+                    <label><input type="checkbox" name="searchIn" value="ecli"> ECLI</label>
+                    <label><input type="checkbox" name="searchIn" value="zaaknummer"> Zaaknummer</label>
+                </div>
+                <button id="smartFilterButton">Filter Binnen Resultaten</button>
+            </div>
         </div>
 
         <div id="status"></div>
         <div id="results"></div>
+        <div id="paginationControls"></div>
     </div>
 
     <script src="script.js"></script>
