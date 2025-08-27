@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         jurisprudencePagination: document.getElementById('jurisprudencePagination'),
         wettenbankSearchButton: document.getElementById('wettenbankSearchButton'),
         wettenbankKeyword: document.getElementById('wettenbankKeyword'),
-        wettenbankDate: document.getElementById('wettenbankDate'),
         wettenbankStatus: document.getElementById('wettenbankStatus'),
         wettenbankResults: document.getElementById('wettenbankResults'),
         pinnedItemContainer: document.getElementById('pinnedItemContainer'),
@@ -185,27 +184,19 @@ document.addEventListener('DOMContentLoaded', () => {
         showStatus(elements.wettenbankStatus, 'Wettenbank wordt doorzocht...');
         elements.wettenbankResults.innerHTML = '';
         const keyword = elements.wettenbankKeyword.value.trim();
-        const date = elements.wettenbankDate.value;
-
-        if (!keyword && !date) {
-            showStatus(elements.wettenbankStatus, 'Voer een trefwoord of datum in.', 'error');
+        
+        // De problematische datumfilter is hier verwijderd voor een betrouwbare werking.
+        if (!keyword) {
+            showStatus(elements.wettenbankStatus, 'Voer een trefwoord in.', 'error');
             return;
         }
 
-        let queryParts = [];
-        if (keyword) {
-            queryParts.push(keyword);
-        }
-        if (date) {
-            queryParts.push(`dcterms.issued=${date}`);
-        }
-        const finalQuery = queryParts.join(' AND ');
-        
         const params = new URLSearchParams({
-            query: finalQuery,
+            query: keyword,
             version: '1.2',
             operation: 'searchRetrieve',
-            'x-connection': 'w'
+            'x-connection': 'w',
+            maximumRecords: '50' // Limiteer het aantal resultaten voor de performance
         });
 
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
@@ -219,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const xmlString = await response.text();
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
-            
+
             if (xmlDoc.getElementsByTagName("parsererror").length) throw new Error("Fout bij het verwerken van de XML-data.");
 
             const records = xmlDoc.querySelectorAll('record');
