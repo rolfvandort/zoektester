@@ -53,17 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
         smartSearchSection: document.getElementById('smartSearchSection'),
         smartSearchInput: document.getElementById('smartSearchInput'),
         searchInCheckboxes: document.querySelectorAll('input[name="searchIn"]'),
-        
         jurisprudenceStatus: document.getElementById('jurisprudenceStatus'),
         jurisprudenceResults: document.getElementById('jurisprudenceResults'),
         jurisprudencePagination: document.getElementById('jurisprudencePagination'),
-        
         wettenbankSearchButton: document.getElementById('wettenbankSearchButton'),
         wettenbankKeyword: document.getElementById('wettenbankKeyword'),
         wettenbankDate: document.getElementById('wettenbankDate'),
         wettenbankStatus: document.getElementById('wettenbankStatus'),
         wettenbankResults: document.getElementById('wettenbankResults'),
-        
         pinnedItemContainer: document.getElementById('pinnedItemContainer'),
         pinnedItemContent: document.getElementById('pinnedItemContent')
     };
@@ -119,7 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
         const baseUrl = 'https://data.rechtspraak.nl/uitspraken/zoeken';
-        const requestUrl = `${proxyUrl}${encodeURIComponent(`${baseUrl}?${params.toString()}`)}`;
+        const targetUrl = `${baseUrl}?${params.toString()}`;
+        const requestUrl = `${proxyUrl}${encodeURIComponent(targetUrl)}`;
 
         try {
             const response = await fetch(requestUrl);
@@ -182,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderJurisprudencePage(currentPage);
     };
 
-    // --- WETTENBANK ZOEKER ---
+    // --- WETTENBANK ZOEKER (GECORRIGEERD) ---
     const handleWettenbankSearch = async () => {
         showStatus(elements.wettenbankStatus, 'Wettenbank wordt doorzocht...');
         elements.wettenbankResults.innerHTML = '';
@@ -194,13 +192,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let query = keyword;
-        if (date) {
-            query += ` AND dcterms.available=${date}`;
+        let queryParts = [];
+        if (keyword) {
+            queryParts.push(keyword);
         }
+        if (date) {
+            queryParts.push(`dcterms.issued=${date}`);
+        }
+        const finalQuery = queryParts.join(' AND ');
         
         const params = new URLSearchParams({
-            query: query,
+            query: finalQuery,
             version: '1.2',
             operation: 'searchRetrieve',
             'x-connection': 'w'
@@ -208,7 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const proxyUrl = 'https://api.allorigins.win/raw?url=';
         const baseUrl = 'https://zoekdienst.overheid.nl/sru/Search';
-        const requestUrl = `${proxyUrl}${encodeURIComponent(`${baseUrl}?${params.toString()}`)}`;
+        const targetUrl = `${baseUrl}?${params.toString()}`;
+        const requestUrl = `${proxyUrl}${encodeURIComponent(targetUrl)}`;
 
         try {
             const response = await fetch(requestUrl);
@@ -216,14 +219,20 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const xmlString = await response.text();
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
+            
+            if (xmlDoc.getElementsByTagName("parsererror").length) throw new Error("Fout bij het verwerken van de XML-data.");
 
             const records = xmlDoc.querySelectorAll('record');
             showStatus(elements.wettenbankStatus, `${records.length} resultaten gevonden in Wettenbank.`, 'success');
 
+            if (records.length === 0) return;
+
             let html = '<ul>';
             records.forEach(record => {
-                const title = record.querySelector('title')?.textContent || 'Geen titel';
-                const link = record.querySelector('identifier')?.textContent || '#';
+                const titleNode = record.querySelector('title, \\:title');
+                const identifierNode = record.querySelector('identifier, \\:identifier');
+                const title = titleNode?.textContent || 'Geen titel';
+                const link = identifierNode?.textContent || '#';
                 html += `<li><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></li>`;
             });
             html += '</ul>';
